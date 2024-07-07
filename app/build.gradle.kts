@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3.android)
+    implementation("androidx.compose.material:material-icons-extended:1.4.0")
 
     // CameraX dependencies
     implementation("androidx.camera:camera-camera2:1.3.4")
