@@ -1,4 +1,4 @@
-package com.example.justscanit
+package com.dwarkakhali.justscanit
 
 import android.Manifest
 import android.os.Bundle

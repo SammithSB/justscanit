@@ -1,7 +1,5 @@
-package com.example.justscanit
+package com.dwarkakhali.justscanit
 
-import android.graphics.Rect
-import android.graphics.RectF
 import android.util.Log
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage

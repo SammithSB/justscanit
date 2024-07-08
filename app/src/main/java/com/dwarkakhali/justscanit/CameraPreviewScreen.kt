@@ -1,4 +1,4 @@
-package com.example.justscanit
+package com.dwarkakhali.justscanit
 
 import android.content.ActivityNotFoundException
 import android.util.Log

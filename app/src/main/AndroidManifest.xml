@@ -17,7 +17,7 @@
         android:theme="@style/Theme.JustScanIt"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.dwarkakhali.justscanit.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.JustScanIt">
 
