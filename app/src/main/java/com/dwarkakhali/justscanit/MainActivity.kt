@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
+import com.example.justscanit.CameraPreviewScreen
 
 class MainActivity : ComponentActivity() {
     private val viewModel: ScannerViewModel by viewModels()
@@ -59,9 +60,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
 
 
 

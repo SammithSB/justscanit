@@ -1,4 +1,4 @@
-package com.dwarkakhali.justscanit
+package com.example.justscanit
 
 import android.content.ActivityNotFoundException
 import android.util.Log
@@ -12,8 +12,11 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,13 +27,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import kotlinx.coroutines.launch
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
+import com.dwarkakhali.justscanit.ScannerViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,8 +83,6 @@ fun CameraPreviewScreen(viewModel: ScannerViewModel, onBack: () -> Unit) {
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
-        modifier = Modifier
-            .zIndex(0f),
         sheetContent = {
             Column(
                 modifier = Modifier
@@ -96,51 +97,55 @@ fun CameraPreviewScreen(viewModel: ScannerViewModel, onBack: () -> Unit) {
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                HorizontalDivider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+                Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
 
-                scannedDataList.forEach { (scannedData, count) ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        shape = RoundedCornerShape(8.dp),
-                        elevation = CardDefaults.cardElevation(4.dp)
-                    ) {
-                        Row(
+                LazyColumn(
+                    modifier = Modifier.fillMaxHeight(0.8f)
+                ) {
+                    items(scannedDataList) { (scannedData, count) ->
+                        Card(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.background)
-                                .padding(12.dp)
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            elevation = CardDefaults.cardElevation(4.dp)
                         ) {
-                            Column(
-                                modifier = Modifier.weight(1f)
+                            Row(
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.background)
+                                    .padding(12.dp)
                             ) {
-                                Text(
-                                    text = "$scannedData (x$count)",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                                if (scannedData.startsWith("http://") || scannedData.startsWith("https://")) {
-                                    TextButton(onClick = {
-                                        try {
-                                            uriHandler.openUri(scannedData)
-                                        } catch (e: ActivityNotFoundException) {
-                                            Toast.makeText(context, "No application can handle this request. Please install a web browser.", Toast.LENGTH_LONG).show()
-                                            e.printStackTrace()
+                                Column(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text(
+                                        text = "$scannedData (x$count)",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onBackground
+                                    )
+                                    if (scannedData.startsWith("http://") || scannedData.startsWith("https://")) {
+                                        TextButton(onClick = {
+                                            try {
+                                                uriHandler.openUri(scannedData)
+                                            } catch (e: ActivityNotFoundException) {
+                                                Toast.makeText(context, "No application can handle this request. Please install a web browser.", Toast.LENGTH_LONG).show()
+                                                e.printStackTrace()
+                                            }
+                                        }) {
+                                            Text("Open Link")
                                         }
-                                    }) {
-                                        Text("Open Link")
                                     }
                                 }
-                            }
-                            IconButton(onClick = {
-                                clipboardManager.setText(AnnotatedString(scannedData))
-                                Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.ContentCopy,
-                                    contentDescription = "Copy",
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
+                                IconButton(onClick = {
+                                    clipboardManager.setText(AnnotatedString(scannedData))
+                                    Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.ContentCopy,
+                                        contentDescription = "Copy",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
                         }
                     }
@@ -148,7 +153,7 @@ fun CameraPreviewScreen(viewModel: ScannerViewModel, onBack: () -> Unit) {
 
                 Button(
                     onClick = { viewModel.clearScannedDataList() },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp)
@@ -162,11 +167,17 @@ fun CameraPreviewScreen(viewModel: ScannerViewModel, onBack: () -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { if (isCameraPaused) viewModel.resumeScanning() }
         ) {
             AndroidView(
                 factory = { previewView },
                 modifier = Modifier.fillMaxSize()
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable { if (isCameraPaused) viewModel.resumeScanning() }
+                    .background(Color.Transparent) // Make sure the click area covers the full screen
             )
 
             if (showScanMessage) {
@@ -197,15 +208,3 @@ fun CameraPreviewScreen(viewModel: ScannerViewModel, onBack: () -> Unit) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-package com.example.justscanit
+package com.drarkakhali.justscanit
 
 import org.junit.Test
 

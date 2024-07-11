@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.justscanit"
+    namespace = "com.drarkakhali.justscanit"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.justscanit"
+        applicationId = "com.drarkakhali.justscanit"
         minSdk = 27
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

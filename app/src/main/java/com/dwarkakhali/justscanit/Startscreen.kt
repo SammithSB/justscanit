@@ -1,6 +1,7 @@
 package com.dwarkakhali.justscanit
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,14 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import com.example.justscanit.R
+import com.drarkakhali.justscanit.R
 
 @Composable
 fun StartScreen(onStartCamera: () -> Unit) {
-
+    val uriHandler = LocalUriHandler.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,6 +72,14 @@ fun StartScreen(onStartCamera: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(32.dp))
+
+        Text(
+            text = "Privacy Policy",
+            style = MaterialTheme.typography.bodyLarge.copy(textDecoration = TextDecoration.Underline),
+            modifier = Modifier.clickable {
+                uriHandler.openUri("https://www.freeprivacypolicy.com/live/5343b75f-7fbb-4b57-95f5-99b4cbdcd5ab")
+            }
+        )
     }
 }
 
